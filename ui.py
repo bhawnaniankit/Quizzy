@@ -3,11 +3,13 @@ from quiz_brain import QuizBrain
 
 THEME_COLOR="#375362"
 
+
 class QuizInterface:
     def __init__(self,quiz_brain:QuizBrain):
         self.quiz=quiz_brain
         self.window=Tk()
         self.window.title("Quizzy")
+        self.WINDOW_TIMER=self.window.after(1000)
         self.window.config(padx=20,pady=20,bg=THEME_COLOR)
         self.canvas=Canvas(width=400,height=300)
         self.canvas.grid(row=1,column=0,columnspan=2,pady=50)
@@ -34,18 +36,31 @@ class QuizInterface:
         
     def usr_true(self):
         if(self.quiz.question_number<=9):
-            self.quiz.check_ans("True",self.quiz.correct_ans())
+            cond=self.quiz.check_ans("True",self.quiz.correct_ans())
             self.update_score()
-        if self.quiz.still_has_questions():
-            self.next_ques()
+        
+        self.feedback(cond)
         
     def usr_false(self):
         if(self.quiz.question_number<=9):
-            self.quiz.check_ans("False",self.quiz.correct_ans())
+            cond=self.quiz.check_ans("False",self.quiz.correct_ans())
             self.update_score()
-        if self.quiz.still_has_questions():
-            self.next_ques()
+        self.feedback(cond)
+        
         
             
     def update_score(self):
         self.Score.config(text=f"Score: {self.quiz.score}")
+        
+    def feedback(self,cond):
+        if cond:
+            self.canvas.config(bg="green")
+            WINDOW_TIMER=self.window.after(1000,self.go_back)
+        else:
+            self.canvas.config(bg="red")
+            WINDOW_TIMER=self.window.after(1000,self.go_back)
+            
+    def go_back(self):
+        self.canvas.config(bg="white")
+        if self.quiz.still_has_questions():
+            self.next_ques()
