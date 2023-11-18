@@ -5,8 +5,11 @@ class QuizBrain:
         self.score=0
         
     def next_q(self):
-        user_ans=input(f"Q.{self.question_number+1}: {(self.question_list[self.question_number]).text} (True/False)")
-        self.check_ans(user_ans,(self.question_list[self.question_number]).answer)
+        return f"Q.{self.question_number+1}: {(self.question_list[self.question_number]).text}"
+
+    def check_ans(self):
+        # self.check_ans(user_ans,(self.question_list[self.question_number]).answer)
+        pass
         
     def check_ans(self,user_ans,correct_ans):
         if (user_ans.lower()==correct_ans.lower()):
