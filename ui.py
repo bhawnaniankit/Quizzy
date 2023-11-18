@@ -13,16 +13,16 @@ class QuizInterface:
         self.canvas.grid(row=1,column=0,columnspan=2,pady=50)
         self.ques=self.canvas.create_text(200,150,text="Question",font=("Arial",20,"italic"),width=350)
         
-        Score=Label(text="Score: 3",bg=THEME_COLOR,fg="white",font=("Arial",10,"bold"),pady=20)
-        Score.grid(row=0,column=1)
+        self.Score=Label(text=f"Score: {self.quiz.score}",bg=THEME_COLOR,fg="white",font=("Arial",10,"bold"),pady=20)
+        self.Score.grid(row=0,column=1)
         
         rimg=PhotoImage(file="./QuizGame/img/true1.png")
         wimg=PhotoImage(file="./QuizGame/img/false2.png")
         
-        true=Button(image=rimg,bg=THEME_COLOR)
+        true=Button(image=rimg,bg=THEME_COLOR,command=self.usr_true)
         true.grid(row=2,column=1)
         
-        false=Button(image=wimg,bg=THEME_COLOR)
+        false=Button(image=wimg,bg=THEME_COLOR,command=self.usr_false)
         false.grid(row=2,column=0)
         
         self.next_ques()
@@ -32,3 +32,20 @@ class QuizInterface:
     def next_ques(self):
         self.canvas.itemconfig(self.ques,text=self.quiz.next_q())
         
+    def usr_true(self):
+        if(self.quiz.question_number<=9):
+            self.quiz.check_ans("True",self.quiz.correct_ans())
+            self.update_score()
+        if self.quiz.still_has_questions():
+            self.next_ques()
+        
+    def usr_false(self):
+        if(self.quiz.question_number<=9):
+            self.quiz.check_ans("False",self.quiz.correct_ans())
+            self.update_score()
+        if self.quiz.still_has_questions():
+            self.next_ques()
+        
+            
+    def update_score(self):
+        self.Score.config(text=f"Score: {self.quiz.score}")
